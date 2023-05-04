@@ -1,0 +1,134 @@
+\documentclass[a4paper, 14pt]{extarticle}
+
+% кодировка
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+
+% поля
+\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
+\usepackage{fancyhdr}
+
+% переносы слов
+\usepackage[english,russian]{babel}
+
+% шрифт Таймс
+\usepackage{tempora}
+\usepackage{newtxmath}
+
+% межстрочный интервал
+\usepackage[onehalfspacing]{setspace}
+
+% отступ первой строки
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+
+\pagenumbering{arabic}
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+
+\makeatletter
+\def\@discipline{---}
+\newcommand{\discipline}[1]{
+  \def\@discipline{#1}
+}
+\def\@group{---}
+\newcommand{\group}[1]{
+  \def\@group{#1}
+}
+\def\@email{---}
+\newcommand{\email}[1]{
+  \def\@email{#1}
+}
+\def\@code{---}
+\newcommand{\code}[1]{
+  \def\@code{#1}
+}
+\def\@version{1}
+\newcommand{\version}[1]{
+  \def\@version{#1}
+}
+\def\@draft{0}
+\newcommand{\draft}[1]{
+  \def\@draft{#1}
+}
+\renewcommand{\title}[1]{
+  \def\@title{#1}
+  \let\doctitle\@title
+}
+\renewcommand{\date}[1]{
+  \def\@date{#1}
+  \let\docdate\@date
+}
+\makeatother
+
+
+\usepackage{auto-pst-pdf}
+\usepackage{pstricks}
+\usepackage{pst-barcode}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% подписи
+\usepackage[singlelinecheck=false]{caption}
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+
+% иллюстрация
+\newcommand{\fig}[3][1]{
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}\label{#2}
+    \end{figure}
+}
+\renewcommand{\thefigure}{\arabic{figure}}
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
+
+\usepackage[ddmmyyyy,hhmmss]{datetime}
+\usepackage{etoolbox}
+
+\definecolor{verylightgray}{gray}{0.9}
+
+\makeatletter
+
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[R]{\ifnum\value{page}>1 \@discipline \else \fi}
+    \fancyfoot[L]{\texttt{\textcolor{verylightgray}{\@code~\ifdefempty{\@version}{}{v\@version}}}}
+    \fancyfoot[C]{\thepage}
+    \fancyhead[L]{\ifnum\@draft=1 \footnotesize\texttt{Драфт от \docdate{} Версия \@version{} Экспортировано \today{} в \currenttime{} UTC} \else {\ifnum\value{page}>1 \doctitle \else \textcolor{gray}{\small{Экспортировано \today{} в \currenttime{} UTC}} \fi} \fi}
+}
+
+\newcolumntype{R}{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}X}
+
+\def\@maketitle{
+    \centering
+    \begin{tabularx}{\linewidth}{X R}
+        {\LARGE \@title} & Дисциплина: \@discipline\\
+        \@author & \@email\\
+        \@date & \@group\\
+        \vspace{1.5em}\\
+        \hline\\
+    \end{tabularx}
+}
+
+\makeatother
+
+\pagestyle{plain}
+
+% Augmented matrix style
+% Usage: *matrix environment with [ccc|c]-like argument
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor=black,
+}
